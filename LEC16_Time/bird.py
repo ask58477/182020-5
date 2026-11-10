@@ -5,6 +5,8 @@ from pico2d import get_canvas_width, load_image
 
 
 class Bird:
+    BASE_SPEED = 185
+    BASE_ANIMATION_FPS = 12
     FRAME_ORIGINS = [
         (column * 184, 341) for column in range(5)
     ] + [
@@ -19,11 +21,14 @@ class Bird:
         self.frame = 0
         self.direction = randint(0, 1) * 2 - 1
         self.speed = randint(120, 250)
+        self.animation_fps = (
+            self.BASE_ANIMATION_FPS * self.speed / self.BASE_SPEED
+        )
 
     def update(self):
-        self.frame = (self.frame + 12 * game_framework.frame_time) % len(
-            self.FRAME_ORIGINS
-        )
+        self.frame = (
+            self.frame + self.animation_fps * game_framework.frame_time
+        ) % len(self.FRAME_ORIGINS)
         self.x += self.direction * self.speed * game_framework.frame_time
 
         edge = 55
